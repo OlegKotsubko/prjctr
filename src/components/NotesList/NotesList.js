@@ -5,7 +5,7 @@ import styles from './NotesList.module.scss'
 import Note from "../Note/Note";
 
 const NotesList = () => {
-  const {notes} = useContext(NoteContext);
+  const {state} = useContext(NoteContext);
 
   return(
     <div>
@@ -14,7 +14,7 @@ const NotesList = () => {
       </div>
 
       <div className={styles.grid}>
-        {notes?.map(({title, rawTextFromHTML, id}) => {
+        {state?.map(({title, rawTextFromHTML, id}) => {
           return(
             <Note
               key={id}

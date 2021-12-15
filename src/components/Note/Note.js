@@ -12,7 +12,7 @@ const Note = ({
   title,
   description,
 }) => {
-  const {deleteNote, findNote, getNoteById, previewMode, editItem} = useContext(NoteContext);
+  const {findNote, getNoteById, previewMode, editItem, dispatch} = useContext(NoteContext);
 
   return (
     <div
@@ -37,7 +37,11 @@ const Note = ({
               <Button
                 clickHandler={(e) => {
                   e.stopPropagation();
-                  deleteNote(id);
+                  console.log('delete')
+                  dispatch({
+                    type: "REMOVE_NOTE",
+                    payload: id
+                  });
                 }}
                 mod="danger"
                 type="button"

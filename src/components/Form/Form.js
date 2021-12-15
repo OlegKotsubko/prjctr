@@ -1,5 +1,7 @@
 import React, {useState, useContext, useEffect} from "react";
 import DOMPurify from 'dompurify';
+import { v4 as uuid } from 'uuid';
+
 
 import Button from "../Button/Button";
 import Input from "../Input/Input";
@@ -14,7 +16,7 @@ const Form = () => {
   const [title, setTitle] = useState('')
   const [titleAlert, setTitleAlert] = useState(0)
   const [description, setDescription] = useState('')
-  const {addNote, editItem, editTask} = useContext(NoteContext);
+  const {submitEdit, editItem, dispatch} = useContext(NoteContext);
 
   useEffect(() => {
     if(editItem !== null) {
@@ -50,12 +52,33 @@ const Form = () => {
 
     if(title.trim() !== '' && rawTextFromHTML !== '') {
       if (editItem === null) {
-        addNote({title, description, rawTextFromHTML, sanitizedHTML})
+        dispatch({
+          type: "ADD_NOTE",
+          payload: {
+            title,
+            description,
+            rawTextFromHTML,
+            sanitizedHTML,
+            id: uuid(),
+          }
+        })
         clearHandler()
       } else {
-        editTask(title, description, rawTextFromHTML, sanitizedHTML, editItem.id)
+        dispatch({
+          type: "EDIT_NOTE",
+          payload: {
+            title,
+            description,
+            rawTextFromHTML,
+            sanitizedHTML,
+            id: editItem.id,
+          }
+        })
+        submitEdit()
         clearHandler()
       }
+
+      setTitleAlert(0)
     }
   }
 
