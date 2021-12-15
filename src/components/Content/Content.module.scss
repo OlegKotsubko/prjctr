@@ -1,0 +1,11 @@
+.block {
+  display: grid;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
+
+  @media (min-width: 1200px) {
+    grid-template-columns: 1fr 600px;
+    grid-column-gap: 24px;
+  }
+}
