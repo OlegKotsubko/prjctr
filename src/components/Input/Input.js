@@ -8,11 +8,13 @@ const Input = ({
   inputHandler,
   placeholder,
   className,
+  name,
 }) => (
   <input
     type={type}
     className={classNames(styles.block, className)}
     value={value}
+    name={name}
     onInput={inputHandler}
     placeholder={placeholder}
   />

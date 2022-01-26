@@ -3,6 +3,7 @@ import DOMPurify from 'dompurify';
 import { v4 as uuid } from 'uuid';
 
 
+import Alert from "../Alert/Alert";
 import Button from "../Button/Button";
 import Input from "../Input/Input";
 
@@ -11,74 +12,122 @@ import { NoteContext } from "../../contexts/NotesContext";
 import styles from './Form.module.scss'
 
 const MAX_TITLE_LENGTH = 10
+const MAX_DESCRIPTION_LENGTH = 1000
 
 const Form = () => {
-  const [title, setTitle] = useState('')
-  const [titleAlert, setTitleAlert] = useState(0)
-  const [description, setDescription] = useState('')
-  const {submitEdit, editItem, dispatch} = useContext(NoteContext);
+  const {
+    submitEdit,
+    editItem,
+    dispatch
+  } = useContext(NoteContext);
+
+  const [inputValues, setInputValues] = useState({
+    title: '',
+    description: ''
+  });
+
+  const [inputAlerts, setInputAlerts] = useState({
+    title: '',
+    description: ''
+  });
 
   useEffect(() => {
     if(editItem !== null) {
-      setTitle(editItem.title)
-      setDescription(editItem.description)
+      setInputValues({
+        title: editItem.title,
+        description: editItem.description
+      });
     }
   }, [editItem])
 
-  const titleHandler = (e) => {
-    const text = e.target.value
-    setTitle(text)
+  useEffect(() => {
+    setInputAlerts({
+      title:
+        inputValues.title?.length > MAX_TITLE_LENGTH
+          ? `Title is more then ${Number(inputValues.title?.length) - MAX_TITLE_LENGTH}`
+          : '',
+      description:
+        inputValues.description?.length > MAX_DESCRIPTION_LENGTH
+          ? `Description is more then ${Number(inputValues.description?.length) - MAX_DESCRIPTION_LENGTH}`
+          : '',
+    });
 
-    if(text.length > MAX_TITLE_LENGTH) {
-      setTitleAlert(text.length - MAX_TITLE_LENGTH)
-    } else {
-      setTitleAlert(0)
-    }
+  }, [inputValues.title, inputValues.description])
+
+  const inputHandler = (e) => {
+    const { name, value } = e.target;
+
+    setInputValues({
+      ...inputValues,
+      [name]: value
+    });
   }
-  const descriptionHandler = (e) => setDescription(e.target.value)
 
   const clearHandler = () => {
-    setTitle('')
-    setDescription('')
+    setInputValues({
+      title: '',
+      description: ''
+    });
+
+    setInputAlerts({
+      title: '',
+      description: ''
+    });
   }
 
-  const submitHandler = (e) => {
-    e.preventDefault();
-    const sanitizedHTML = DOMPurify.sanitize(description, {})
+  const submitHandler = () => {
+    if(inputValues.title === '') {
+      setInputAlerts({
+        title: 'Plz fill this field'
+      })
+      return false
+    }
+
+    if(inputValues.description === '') {
+      setInputAlerts({
+        description: 'Plz fill this field'
+      })
+      return false
+    }
+
+    if(
+      inputValues.title?.length > MAX_TITLE_LENGTH
+      || inputValues.description?.length > MAX_DESCRIPTION_LENGTH
+    ) {
+      return false
+    }
+
+    const sanitizedHTML = DOMPurify.sanitize(inputValues.description, {})
     const rawTextFromHTML = sanitizedHTML
       .replace(/(<([^>]+)>)/gi, " ")
       .replace(/<script.*>.*<\/script>/ims, " ")
       .trim()
 
-    if(title.trim() !== '' && rawTextFromHTML !== '') {
-      if (editItem === null) {
-        dispatch({
-          type: "ADD_NOTE",
-          payload: {
-            title,
-            description,
-            rawTextFromHTML,
-            sanitizedHTML,
-            id: uuid(),
-          }
-        })
-        clearHandler()
-      } else {
-        dispatch({
-          type: "EDIT_NOTE",
-          payload: {
-            title,
-            description,
-            rawTextFromHTML,
-            sanitizedHTML,
-            id: editItem.id,
-          }
-        })
-        submitEdit()
-        clearHandler()
-      }
-
-      setTitleAlert(0)
+    if (editItem === null) {
+      dispatch({
+        type: "ADD_NOTE",
+        payload: {
+          title: inputValues.title,
+          description: inputValues.description,
+          rawTextFromHTML,
+          sanitizedHTML,
+          id: uuid(),
+        }
+      })
+      clearHandler()
+    } else {
+      dispatch({
+        type: "EDIT_NOTE",
+        payload: {
+          title: inputValues.title,
+          description: inputValues.description,
+          rawTextFromHTML,
+          sanitizedHTML,
+          id: editItem.id,
+        }
+      })
+      submitEdit()
+      clearHandler()
     }
   }
 
@@ -90,22 +139,22 @@ const Form = () => {
           <Input
             type="text"
             placeholder="Placeholder"
-            value={title}
-            inputHandler={titleHandler}
-            contenteditable
+            name="title"
+            value={inputValues.title}
+            inputHandler={inputHandler}
           />
-         <span className={styles.error}>
-            {titleAlert > MAX_TITLE_LENGTH && `Max title length is ${MAX_TITLE_LENGTH} chars`}
-         </span>
+         <Alert text={inputAlerts.title} />
         </div>
         <div className={styles.input}>
           <textarea
             rows="6"
+            name="description"
             className={styles.textarea}
             placeholder="Placeholder"
-            onInput={descriptionHandler}
-            value={description}
+            onInput={inputHandler}
+            value={inputValues.description}
           />
+          <Alert text={inputAlerts.description} />
         </div>
         <div className={styles.footer}>
           <Button
