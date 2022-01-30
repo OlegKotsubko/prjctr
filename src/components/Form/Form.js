@@ -23,8 +23,8 @@ const Form = () => {
 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [titleError, setTitleError] = useState(' ');
-  const [descriptionError, setDescriptionError] = useState(' ');
+  const [titleError, setTitleError] = useState('');
+  const [descriptionError, setDescriptionError] = useState('');
 
   useEffect(() => {
     if(editItem !== null) {
@@ -33,37 +33,30 @@ const Form = () => {
     }
   }, [editItem])
 
-  const titleHandler = (e) => {
-    const { value } = e.target;
-
-    if(value.length > MAX_TITLE_LENGTH) {
+  useEffect(() => {
+    if(title.length > MAX_TITLE_LENGTH) {
       setTitleError(`Title is more then ${Number(title.length) - (MAX_TITLE_LENGTH)}`)
     } else {
       setTitleError('')
     }
+  }, [title])
 
-    setTitle(value)
-  }
-
-  const descriptionHandler = (e) => {
-    const { value } = e.target;
-
-    if(value.length > MAX_DESCRIPTION_LENGTH) {
+  useEffect(() => {
+    if(description.length > MAX_DESCRIPTION_LENGTH) {
       setDescriptionError(`Description is more then ${Number(description.length) - (MAX_DESCRIPTION_LENGTH)}`)
     } else {
       setDescriptionError('')
     }
-
-    setDescription(value)
-  }
+  }, [description])
 
   const clearForm = () => {
     setTitle('');
     setDescription('')
+    setTitleError('')
+    setDescriptionError('');
   }
 
   const submitHandler = () => {
-
     if(title === '') {
       setTitleError('Plz fill this field')
     }
@@ -72,7 +65,8 @@ const Form = () => {
       setDescriptionError('Plz fill this field');
     }
 
-    if(!descriptionError && !titleError) {
+    if(!descriptionError && !titleError && title !== '' && description !== '') {
+
       const sanitizedHTML = DOMPurify.sanitize(description, {})
       const rawTextFromHTML = sanitizedHTML
         .replace(/(<([^>]+)>)/gi, " ")
@@ -111,24 +105,21 @@ const Form = () => {
     <div className={styles.block}>
       <h1>{editItem ? "Edit note" : "Create new note"}</h1>
       <form>
-        <div className={styles.input}>
+        <div className={styles.offset}>
           <Input
             type="text"
-            placeholder="Placeholder"
-            name="title"
+            placeholder="Title"
             value={title}
-            inputHandler={titleHandler}
+            inputHandler={(e) => setTitle(e.target.value)}
           />
          <Alert text={titleError} />
         </div>
-        <div className={styles.input}>
-          <textarea
-            rows="6"
-            name="description"
-            className={styles.textarea}
-            placeholder="Placeholder"
-            onInput={descriptionHandler}
+        <div className={styles.offset}>
+          <Input
+            type="textarea"
             value={description}
+            placeholder="Description"
+            inputHandler={(e) => setDescription(e.target.value)}
           />
           <Alert text={descriptionError} />
         </div>

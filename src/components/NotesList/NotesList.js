@@ -1,4 +1,4 @@
-import {useContext} from "react";
+import React, {useContext} from "react";
 import {NoteContext} from "../../contexts/NotesContext";
 
 import styles from './NotesList.module.scss'
@@ -12,18 +12,15 @@ const NotesList = () => {
       <div className={styles.header}>
         <h1>Notes</h1>
       </div>
-
       <div className={styles.grid}>
-        {state?.map(({title, rawTextFromHTML, id}) => {
-          return(
-            <Note
-              key={id}
-              id={id}
-              title={title}
-              description={rawTextFromHTML}
-            />
-          )
-        })}
+        {state.map(({title, rawTextFromHTML, id}) => (
+          <Note
+            key={id}
+            id={id}
+            title={title}
+            description={rawTextFromHTML}
+          />
+        ))}
       </div>
     </div>
   )

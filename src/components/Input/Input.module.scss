@@ -4,4 +4,10 @@
   border: 1px solid #dadada;
   line-height: 28px;
   padding: 0 16px;
+
+  &.textarea {
+    padding: 16px;
+    resize: none;
+    height: auto;
+  }
 }
