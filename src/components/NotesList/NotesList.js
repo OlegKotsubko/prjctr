@@ -1,11 +1,12 @@
 import React, {useContext} from "react";
 import {NoteContext} from "../../contexts/NotesContext";
+import { removeNote } from "../../reducer/reducer";
 
 import styles from './NotesList.module.scss'
 import Note from "../Note/Note";
 
 const NotesList = () => {
-  const {state} = useContext(NoteContext);
+  const {state, dispatch} = useContext(NoteContext);
 
   return(
     <div>
@@ -19,6 +20,7 @@ const NotesList = () => {
             id={id}
             title={title}
             description={rawTextFromHTML}
+            noteRemoveHandler={removeNote(dispatch)}
           />
         ))}
       </div>

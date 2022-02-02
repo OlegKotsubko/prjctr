@@ -11,18 +11,18 @@ const Note = ({
   id,
   title,
   description,
+  noteRemoveHandler,
 }) => {
   const {
     findNote,
     getNoteById,
     previewMode,
     editItem,
-    dispatch
   } = useContext(NoteContext);
 
   return (
     <div
-      className={classNames(styles.block, (previewMode?.id === id) && styles.active)}
+      className={classNames(styles.block, previewMode && styles.active)}
       onClick={() => getNoteById(id)}
     >
       <h3 className={styles.title}>{title}</h3>
@@ -43,10 +43,7 @@ const Note = ({
               <Button
                 clickHandler={(e) => {
                   e.stopPropagation();
-                  dispatch({
-                    type: "REMOVE_NOTE",
-                    payload: id
-                  });
+                  noteRemoveHandler(id)
                 }}
                 mod="danger"
                 type="button"

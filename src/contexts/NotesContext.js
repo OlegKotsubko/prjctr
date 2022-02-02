@@ -1,14 +1,14 @@
 import { createContext, useState, useReducer, useEffect } from "react";
 
 import mockData from "./mockData";
-import reducer from "../reducer/reducer";
+import notesReducer from "../reducer/reducer";
 
 export const NoteContext = createContext([])
 
 const storage = localStorage.getItem('notes') ? JSON.parse(localStorage.getItem('notes')) : [mockData];
 
 export const NotesContextProvider = ({children}) => {
-  const [state, dispatch] = useReducer(reducer, storage)
+  const [state, dispatch] = useReducer(notesReducer, storage)
   const [editItem, setEditItem] = useState(null)
   const [previewMode, setPreviewMode] = useState(null)
 
