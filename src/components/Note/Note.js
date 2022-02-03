@@ -1,9 +1,7 @@
-import React, {useContext} from "react";
 import classNames from 'classnames'
 
 import Button from "../Button/Button";
-
-import {NoteContext} from "../../contexts/NotesContext";
+import useNoteContext from "../../hooks/useNoteContext";
 
 import styles from './Note.module.scss'
 
@@ -18,7 +16,7 @@ const Note = ({
     getNoteById,
     previewMode,
     editItem,
-  } = useContext(NoteContext);
+  } = useNoteContext();
 
   return (
     <div

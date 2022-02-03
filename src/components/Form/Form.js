@@ -1,4 +1,4 @@
-import React, {useState, useContext} from "react";
+import React, {useState} from "react";
 
 // import Alert from "../Alert/Alert";
 import Button from "../Button/Button";
@@ -6,9 +6,8 @@ import Input from "../Input/Input";
 import isTitleValid from "../../helpers/isTitleValid";
 import isDescriptionValid from "../../helpers/isDescriptionValid";
 
-import { NoteContext } from "../../contexts/NotesContext";
-
 import styles from './Form.module.scss'
+import useNoteContext from "../../hooks/useNoteContext";
 
 const Form = ({
   formTitle,
@@ -19,7 +18,7 @@ const Form = ({
   const {
     submitEdit,
     editItem,
-  } = useContext(NoteContext);
+  } = useNoteContext();
 
   const [title, setTitle] = useState(formTitle);
   const [description, setDescription] = useState(formDescription);

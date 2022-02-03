@@ -1,7 +1,17 @@
-import { createContext, useState, useReducer, useEffect } from "react";
+import {
+  createContext,
+  useState,
+  useReducer,
+  useEffect
+} from "react";
 
+import {
+  addNote,
+  editNote,
+  deleteNote
+} from "../actions/actions";
+import notesReducer from '../reducer/reducer'
 import mockData from "./mockData";
-import notesReducer from "../reducer/reducer";
 
 export const NoteContext = createContext([])
 
@@ -11,6 +21,12 @@ export const NotesContextProvider = ({children}) => {
   const [state, dispatch] = useReducer(notesReducer, storage)
   const [editItem, setEditItem] = useState(null)
   const [previewMode, setPreviewMode] = useState(null)
+
+  const [actions] = useState(() => ({
+    addNote: addNote(dispatch),
+    editNote: editNote(dispatch),
+    deleteNote: deleteNote(dispatch),
+  }))
 
   useEffect(() => {
     localStorage.setItem('notes', JSON.stringify(state))
@@ -34,13 +50,13 @@ export const NotesContextProvider = ({children}) => {
 
   const contextValues = {
     state,
-    dispatch,
     submitEdit,
     findNote,
     editItem,
     getNoteById,
     backToForm,
-    previewMode
+    previewMode,
+    actions,
   }
 
   return (

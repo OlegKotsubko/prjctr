@@ -1,17 +1,16 @@
-import React, {useContext} from "react";
-
 import Content from "./components/Content/Content";
 import Form from "./components/Form/Form";
 import NotesList from "./components/NotesList/NotesList";
-import {NoteContext} from "./contexts/NotesContext";
 import FullViewNote from "./components/FullViewNote/FullViewNote";
-import {
-  addNote,
-  editNote
-} from "./reducer/reducer";
+
+import useNoteContext from "./hooks/useNoteContext";
 
 function App() {
-  const {previewMode, editItem, dispatch} = useContext(NoteContext);
+  const {
+    previewMode,
+    editItem,
+    actions
+  } = useNoteContext();
 
   return (
     <Content>
@@ -23,7 +22,7 @@ function App() {
             formTitle={editItem.title}
             formDescription={editItem.description}
             itemID={editItem.id}
-            formSubmitHandler={editNote(dispatch)}
+            formSubmitHandler={actions.editNote}
           />
         )}
 
@@ -32,7 +31,7 @@ function App() {
             formTitle=""
             formDescription=""
             itemID=""
-            formSubmitHandler={addNote(dispatch)}
+            formSubmitHandler={actions.addNote}
           />
         )}
       </div>

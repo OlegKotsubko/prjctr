@@ -1,13 +1,11 @@
 import {cleanHTML, replaceTags} from "../helpers/cleanHTML";
-import {v4 as uuid} from "uuid";
+import {
+  ADD_NOTE,
+  EDIT_NOTE,
+  DELETE_NOTE
+} from "../actions/actions";
 
-// Events
 
-const ADD_NOTE = "ADD_NOTE"
-const EDIT_NOTE = "EDIT_NOTE"
-const REMOVE_NOTE = "REMOVE_NOTE"
-
-//Reducer
 const notesReducer = (state, event) => {
   switch (event.type) {
     case ADD_NOTE:
@@ -31,7 +29,7 @@ const notesReducer = (state, event) => {
           id: event.id
         } : note)
       ]
-    case REMOVE_NOTE:
+    case DELETE_NOTE:
       return [
         ...state.filter(item => item.id !== event.id)
       ]
@@ -42,34 +40,3 @@ const notesReducer = (state, event) => {
 }
 
 export default notesReducer
-
-export const addNote = (dispatch) => (
-  title,
-  description,
-) =>
-  dispatch({
-    type: ADD_NOTE,
-    title,
-    description,
-    id: uuid()
-});
-
-export const editNote = (dispatch) => (
-  title,
-  description,
-  id
-) =>
-  dispatch({
-    type: EDIT_NOTE,
-    title,
-    description,
-    id
-});
-
-export const removeNote = (dispatch) => (
-  id
-) =>
-  dispatch({
-    type: REMOVE_NOTE,
-    id
-});
