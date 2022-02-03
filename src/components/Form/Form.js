@@ -1,10 +1,11 @@
 import React, {useState} from "react";
 
-// import Alert from "../Alert/Alert";
+import Alert from "../Alert/Alert";
 import Button from "../Button/Button";
 import Input from "../Input/Input";
-import isTitleValid from "../../helpers/isTitleValid";
-import isDescriptionValid from "../../helpers/isDescriptionValid";
+
+import validateTitle from "../../helpers/validateTitle";
+import validateDescription from "../../helpers/validateDescription";
 
 import styles from './Form.module.scss'
 import useNoteContext from "../../hooks/useNoteContext";
@@ -23,15 +24,28 @@ const Form = ({
   const [title, setTitle] = useState(formTitle);
   const [description, setDescription] = useState(formDescription);
 
+  const [titleError, setTitleError] = useState('')
+  const [descriptionError, setDescriptionError] = useState('')
+
+  const clearForm = () => {
+    setTitle('');
+    setDescription('')
+  }
+
   const submitHandler = () => {
-    if(title !== '' && description !== '') {
+    if(
+      titleError === ''
+      && descriptionError === ''
+      && title !== ''
+      && description !== ''
+    ) {
       formSubmitHandler(title, description, itemID)
       submitEdit()
-      setTitle('');
-      setDescription('')
-    } else {
-      console.log('Fields is empty')
+      clearForm()
     }
+
+    setTitleError(validateTitle(title))
+    setDescriptionError(validateDescription(description))
   }
 
   return (
@@ -45,10 +59,10 @@ const Form = ({
             value={title}
             inputHandler={(e) => {
               setTitle(e.target.value)
-              isTitleValid(e.target.value)
+              setTitleError(validateTitle(e.target.value))
             }}
           />
-         {/*<Alert text={titleError} />*/}
+         <Alert text={titleError} />
         </div>
         <div className={styles.offset}>
           <Input
@@ -57,10 +71,10 @@ const Form = ({
             placeholder="Description"
             inputHandler={(e) => {
               setDescription(e.target.value)
-              isDescriptionValid(e.target.value)
+              setDescriptionError(validateDescription(e.target.value))
             }}
           />
-          {/*<Alert text={descriptionError} />*/}
+          <Alert text={descriptionError} />
         </div>
         <div className={styles.footer}>
           <Button
@@ -70,10 +84,7 @@ const Form = ({
             {editItem ? "Save": "Create"}
           </Button>
           <Button
-            clickHandler={() => {
-              setTitle('');
-              setDescription('')
-            }}
+            clickHandler={clearForm}
             mod="empty"
             type="reset"
           >
