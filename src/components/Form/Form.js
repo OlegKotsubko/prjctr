@@ -1,4 +1,7 @@
-import React, {useState} from "react";
+import React, {
+  useState,
+  useMemo
+} from "react";
 
 import Alert from "../Alert/Alert";
 import Button from "../Button/Button";
@@ -24,28 +27,36 @@ const Form = ({
   const [title, setTitle] = useState(formTitle);
   const [description, setDescription] = useState(formDescription);
 
-  const [titleError, setTitleError] = useState('')
-  const [descriptionError, setDescriptionError] = useState('')
+  const [showErrors, setShowErrors] = useState({
+    title: false,
+    description: false
+  });
+
+  const titleErrors = useMemo(() => validateTitle(title),[title]);
+  const descriptionErrors = useMemo(() => validateDescription(description),[description]);
+
 
   const clearForm = () => {
     setTitle('');
     setDescription('')
+    setShowErrors({...showErrors,
+      title: false,
+      description: false
+    })
   }
 
   const submitHandler = () => {
-    if(
-      titleError === ''
-      && descriptionError === ''
-      && title !== ''
-      && description !== ''
-    ) {
-      formSubmitHandler(title, description, itemID)
-      submitEdit()
-      clearForm()
+    if(titleErrors || descriptionErrors) {
+      setShowErrors({...showErrors,
+        title: true,
+        description: true
+      })
+      return
     }
 
-    setTitleError(validateTitle(title))
-    setDescriptionError(validateDescription(description))
+    formSubmitHandler(title, description, itemID)
+    submitEdit()
+    clearForm()
   }
 
   return (
@@ -59,10 +70,10 @@ const Form = ({
             value={title}
             inputHandler={(e) => {
               setTitle(e.target.value)
-              setTitleError(validateTitle(e.target.value))
+              setShowErrors({...showErrors, title: true})
             }}
           />
-         <Alert text={titleError} />
+          <Alert text={showErrors.title && titleErrors} />
         </div>
         <div className={styles.offset}>
           <Input
@@ -71,10 +82,10 @@ const Form = ({
             placeholder="Description"
             inputHandler={(e) => {
               setDescription(e.target.value)
-              setDescriptionError(validateDescription(e.target.value))
+              setShowErrors({...showErrors, description: true})
             }}
           />
-          <Alert text={descriptionError} />
+          <Alert text={showErrors.description && descriptionErrors} />
         </div>
         <div className={styles.footer}>
           <Button
