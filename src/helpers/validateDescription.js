@@ -1,4 +1,4 @@
-const MAX_DESCRIPTION_LENGTH = 8
+const MAX_DESCRIPTION_LENGTH = 1000
 
 const validateDescription = (description) => {
   if(description.length > MAX_DESCRIPTION_LENGTH) {
