@@ -39,7 +39,7 @@ const Form = ({
   const clearForm = () => {
     setTitle('');
     setDescription('')
-    setShowErrors({...showErrors,
+    setShowErrors({
       title: false,
       description: false
     })
@@ -47,9 +47,9 @@ const Form = ({
 
   const submitHandler = () => {
     if(titleErrors || descriptionErrors) {
-      setShowErrors({...showErrors,
-        title: true,
-        description: true
+      setShowErrors({
+        title: !!titleErrors,
+        description: !!descriptionErrors
       })
       return
     }
