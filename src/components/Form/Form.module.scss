@@ -2,15 +2,8 @@
   max-width: 400px;
 }
 
-.input {
+.offset {
   margin-bottom: 16px;
-}
-
-.textarea {
-  padding: 16px;
-  width: 100%;
-  border: 1px solid #dadada;
-  resize: none;
 }
 
 .footer {
@@ -18,9 +11,4 @@
   gap: 16px;
 }
 
-.error {
-  min-height: 14px;
-  font-size: 11px;
-  color: red;
-  display: block;
-}
+

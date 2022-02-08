@@ -1,111 +1,91 @@
-import React, {useState, useContext, useEffect} from "react";
-import DOMPurify from 'dompurify';
-import { v4 as uuid } from 'uuid';
+import React, {
+  useState,
+  useMemo
+} from "react";
 
-
+import Alert from "../Alert/Alert";
 import Button from "../Button/Button";
 import Input from "../Input/Input";
 
-import { NoteContext } from "../../contexts/NotesContext";
+import validateTitle from "../../helpers/validateTitle";
+import validateDescription from "../../helpers/validateDescription";
 
 import styles from './Form.module.scss'
+import useNoteContext from "../../hooks/useNoteContext";
 
-const MAX_TITLE_LENGTH = 10
+const Form = ({
+  formTitle,
+  formDescription,
+  itemID,
+  formSubmitHandler,
+}) => {
+  const {
+    submitEdit,
+    editItem,
+  } = useNoteContext();
 
-const Form = () => {
-  const [title, setTitle] = useState('')
-  const [titleAlert, setTitleAlert] = useState(0)
-  const [description, setDescription] = useState('')
-  const {submitEdit, editItem, dispatch} = useContext(NoteContext);
+  const [title, setTitle] = useState(formTitle);
+  const [description, setDescription] = useState(formDescription);
 
-  useEffect(() => {
-    if(editItem !== null) {
-      setTitle(editItem.title)
-      setDescription(editItem.description)
-    }
-  }, [editItem])
+  const [showErrors, setShowErrors] = useState({
+    title: false,
+    description: false
+  });
 
-  const titleHandler = (e) => {
-    const text = e.target.value
-    setTitle(text)
+  const titleErrors = useMemo(() => validateTitle(title),[title]);
+  const descriptionErrors = useMemo(() => validateDescription(description),[description]);
 
-    if(text.length > MAX_TITLE_LENGTH) {
-      setTitleAlert(text.length - MAX_TITLE_LENGTH)
-    } else {
-      setTitleAlert(0)
-    }
-  }
-  const descriptionHandler = (e) => setDescription(e.target.value)
 
-  const clearHandler = () => {
-    setTitle('')
+  const clearForm = () => {
+    setTitle('');
     setDescription('')
+    setShowErrors({
+      title: false,
+      description: false
+    })
   }
 
-  const submitHandler = (e) => {
-    e.preventDefault();
-    const sanitizedHTML = DOMPurify.sanitize(description, {})
-    const rawTextFromHTML = sanitizedHTML
-      .replace(/(<([^>]+)>)/gi, " ")
-      .replace(/<script.*>.*<\/script>/ims, " ")
-      .trim()
-
-    if(title.trim() !== '' && rawTextFromHTML !== '') {
-      if (editItem === null) {
-        dispatch({
-          type: "ADD_NOTE",
-          payload: {
-            title,
-            description,
-            rawTextFromHTML,
-            sanitizedHTML,
-            id: uuid(),
-          }
-        })
-        clearHandler()
-      } else {
-        dispatch({
-          type: "EDIT_NOTE",
-          payload: {
-            title,
-            description,
-            rawTextFromHTML,
-            sanitizedHTML,
-            id: editItem.id,
-          }
-        })
-        submitEdit()
-        clearHandler()
-      }
-
-      setTitleAlert(0)
+  const submitHandler = () => {
+    if(titleErrors || descriptionErrors) {
+      setShowErrors({
+        title: !!titleErrors,
+        description: !!descriptionErrors
+      })
+      return
     }
+
+    formSubmitHandler(title, description, itemID)
+    submitEdit()
+    clearForm()
   }
 
   return (
     <div className={styles.block}>
       <h1>{editItem ? "Edit note" : "Create new note"}</h1>
       <form>
-        <div className={styles.input}>
+        <div className={styles.offset}>
           <Input
             type="text"
-            placeholder="Placeholder"
+            placeholder="Title"
             value={title}
-            inputHandler={titleHandler}
-            contenteditable
+            inputHandler={(e) => {
+              setTitle(e.target.value)
+              setShowErrors({...showErrors, title: true})
+            }}
           />
-         <span className={styles.error}>
-            {titleAlert > MAX_TITLE_LENGTH && `Max title length is ${MAX_TITLE_LENGTH} chars`}
-         </span>
+          <Alert text={showErrors.title && titleErrors} />
         </div>
-        <div className={styles.input}>
-          <textarea
-            rows="6"
-            className={styles.textarea}
-            placeholder="Placeholder"
-            onInput={descriptionHandler}
+        <div className={styles.offset}>
+          <Input
+            type="textarea"
             value={description}
+            placeholder="Description"
+            inputHandler={(e) => {
+              setDescription(e.target.value)
+              setShowErrors({...showErrors, description: true})
+            }}
           />
+          <Alert text={showErrors.description && descriptionErrors} />
         </div>
         <div className={styles.footer}>
           <Button
@@ -115,9 +95,9 @@ const Form = () => {
             {editItem ? "Save": "Create"}
           </Button>
           <Button
-            clickHandler={clearHandler}
+            clickHandler={clearForm}
             mod="empty"
-            type="button"
+            type="reset"
           >
             Clear form
           </Button>

@@ -1,41 +1,42 @@
-// Actions
+import {cleanHTML, replaceTags} from "../helpers/cleanHTML";
+import {
+  ADD_NOTE,
+  EDIT_NOTE,
+  DELETE_NOTE
+} from "../actions/actions";
 
-const ADD_NOTE = "ADD_NOTE"
-const EDIT_NOTE = "EDIT_NOTE"
-const REMOVE_NOTE = "REMOVE_NOTE"
 
-//Reducer
-
-// eslint-disable-next-line import/no-anonymous-default-export
-export default function(state, action) {
-  switch (action.type) {
+const notesReducer = (state, event) => {
+  switch (event.type) {
     case ADD_NOTE:
       return [
         ...state,
         {
-          title: action.payload.title,
-          description: action.payload.description,
-          rawTextFromHTML: action.payload.rawTextFromHTML,
-          sanitizedHTML: action.payload.sanitizedHTML,
-          id: action.payload.id
+          title: event.title,
+          description: event.description,
+          rawTextFromHTML: replaceTags(cleanHTML(event.description)),
+          sanitizedHTML: cleanHTML(event.description),
+          id: event.id
         }
       ]
     case EDIT_NOTE:
       return [
-        ...state.map(note => note.id === action.payload.id ? {
-          title: action.payload.title,
-          description: action.payload.description,
-          rawTextFromHTML: action.payload.rawTextFromHTML,
-          sanitizedHTML: action.payload.sanitizedHTML,
-          id: action.payload.id
+        ...state.map(note => note.id === event.id ? {
+          title: event.title,
+          description: event.description,
+          rawTextFromHTML: replaceTags(cleanHTML(event.description)),
+          sanitizedHTML: cleanHTML(event.description),
+          id: event.id
         } : note)
       ]
-    case REMOVE_NOTE:
+    case DELETE_NOTE:
       return [
-        ...state.filter(item => item.id !== action.payload)
+        ...state.filter(item => item.id !== event.id)
       ]
 
     default:
       return state
   }
 }
+
+export default notesReducer

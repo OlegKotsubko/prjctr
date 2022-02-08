@@ -1,17 +1,17 @@
-import React, {useContext} from "react";
 import Button from "../Button/Button";
-import {NoteContext} from "../../contexts/NotesContext";
+
+import useNoteContext from "../../hooks/useNoteContext";
+
 import styles from './FullViewNote.module.scss'
 
 const FullViewNote = () => {
-  const {previewMode, backToForm} = useContext(NoteContext);
+  const {previewMode, backToForm} = useNoteContext();
 
   const contentClickHandler = (e) => {
     if(e.target.tagName === 'A' && !window.confirm('Do you want to open this link?')) {
       e.preventDefault()
     }
   }
-
   return (
     <div>
       <div className={styles.header}>

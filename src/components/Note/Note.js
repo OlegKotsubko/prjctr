@@ -1,9 +1,7 @@
-import React, {useContext} from "react";
 import classNames from 'classnames'
 
 import Button from "../Button/Button";
-
-import {NoteContext} from "../../contexts/NotesContext";
+import useNoteContext from "../../hooks/useNoteContext";
 
 import styles from './Note.module.scss'
 
@@ -11,12 +9,18 @@ const Note = ({
   id,
   title,
   description,
+  noteRemoveHandler,
 }) => {
-  const {findNote, getNoteById, previewMode, editItem, dispatch} = useContext(NoteContext);
+  const {
+    findNote,
+    getNoteById,
+    previewMode,
+    editItem,
+  } = useNoteContext();
 
   return (
     <div
-      className={classNames(styles.block, (previewMode?.id === id) && styles.active)}
+      className={classNames(styles.block, previewMode && styles.active)}
       onClick={() => getNoteById(id)}
     >
       <h3 className={styles.title}>{title}</h3>
@@ -37,11 +41,7 @@ const Note = ({
               <Button
                 clickHandler={(e) => {
                   e.stopPropagation();
-                  console.log('delete')
-                  dispatch({
-                    type: "REMOVE_NOTE",
-                    payload: id
-                  });
+                  noteRemoveHandler(id)
                 }}
                 mod="danger"
                 type="button"

@@ -1,17 +1,39 @@
 import Content from "./components/Content/Content";
 import Form from "./components/Form/Form";
 import NotesList from "./components/NotesList/NotesList";
-import React, {useContext} from "react";
-import {NoteContext} from "./contexts/NotesContext";
 import FullViewNote from "./components/FullViewNote/FullViewNote";
 
+import useNoteContext from "./hooks/useNoteContext";
+
 function App() {
-  const {previewMode} = useContext(NoteContext);
+  const {
+    previewMode,
+    editItem,
+    actions
+  } = useNoteContext();
 
   return (
     <Content>
       <div>
-        {previewMode !== null ? <FullViewNote /> : <Form />}
+        {previewMode !== null && <FullViewNote />}
+
+        {previewMode === null && editItem && (
+          <Form
+            formTitle={editItem.title}
+            formDescription={editItem.description}
+            itemID={editItem.id}
+            formSubmitHandler={actions.editNote}
+          />
+        )}
+
+        {previewMode === null && !editItem && (
+          <Form
+            formTitle=""
+            formDescription=""
+            itemID=""
+            formSubmitHandler={actions.addNote}
+          />
+        )}
       </div>
       <div>
         <NotesList />
