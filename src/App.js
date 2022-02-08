@@ -4,36 +4,42 @@ import NotesList from "./components/NotesList/NotesList";
 import FullViewNote from "./components/FullViewNote/FullViewNote";
 
 import useNoteContext from "./hooks/useNoteContext";
+import useViewModeContext from "./hooks/useViewModeContext";
 
 function App() {
   const {
-    previewMode,
-    editItem,
-    actions
+    actions,
+    activeNote,
   } = useNoteContext();
+
+  const {
+    isEdit,
+    isPreview,
+  } = useViewModeContext()
 
   return (
     <Content>
       <div>
-        {previewMode !== null && <FullViewNote />}
+        {isPreview && <FullViewNote />}
 
-        {previewMode === null && editItem && (
+        {activeNote && isEdit &&
           <Form
-            formTitle={editItem.title}
-            formDescription={editItem.description}
-            itemID={editItem.id}
+            formTitle={activeNote.title}
+            formDescription={activeNote.description}
+            itemID={activeNote.id}
             formSubmitHandler={actions.editNote}
           />
-        )}
+        }
 
-        {previewMode === null && !editItem && (
+        {!isEdit && !isPreview &&
           <Form
             formTitle=""
             formDescription=""
             itemID=""
             formSubmitHandler={actions.addNote}
           />
-        )}
+        }
+
       </div>
       <div>
         <NotesList />

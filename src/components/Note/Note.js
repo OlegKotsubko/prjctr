@@ -4,6 +4,7 @@ import Button from "../Button/Button";
 import useNoteContext from "../../hooks/useNoteContext";
 
 import styles from './Note.module.scss'
+import useViewModeContext from "../../hooks/useViewModeContext";
 
 const Note = ({
   id,
@@ -12,45 +13,53 @@ const Note = ({
   noteRemoveHandler,
 }) => {
   const {
-    findNote,
-    getNoteById,
-    previewMode,
-    editItem,
+    setActiveNoteById,
+    activeNote,
   } = useNoteContext();
+
+  const {
+    onEdit,
+    onPreview,
+    isPreview,
+  } = useViewModeContext()
+
+  const isCurrent = activeNote?.id === id
 
   return (
     <div
-      className={classNames(styles.block, previewMode && styles.active)}
-      onClick={() => getNoteById(id)}
+      className={classNames(styles.block, isCurrent && isPreview && styles.active)}
+      onClick={() => {
+        onPreview()
+        setActiveNoteById(id)
+      }}
     >
       <h3 className={styles.title}>{title}</h3>
       <div className={styles.content}>{description}</div>
       <div className={styles.footer}>
-        {previewMode?.id !== id && (
+        {!isPreview &&
           <>
             <Button
               clickHandler={(e) => {
                 e.stopPropagation();
-                findNote(id)
+                setActiveNoteById(id)
+                onEdit()
               }}
               type="button"
             >
               Edit
             </Button>
-            {(editItem?.id !== id) ?
-              <Button
-                clickHandler={(e) => {
-                  e.stopPropagation();
-                  noteRemoveHandler(id)
-                }}
-                mod="danger"
-                type="button"
-              >
-                Delete
-              </Button>
-              : null}
+            <Button
+              clickHandler={(e) => {
+                e.stopPropagation();
+                noteRemoveHandler(id)
+              }}
+              mod="danger"
+              type="button"
+            >
+              Delete
+            </Button>
           </>
-        )}
+        }
       </div>
     </div>
   )

@@ -21,6 +21,7 @@ export const NotesContextProvider = ({children}) => {
   const [state, dispatch] = useReducer(notesReducer, storage)
   const [editItem, setEditItem] = useState(null)
   const [previewMode, setPreviewMode] = useState(null)
+  const [activeNote, setActiveNote] = useState(null)
 
   const [actions] = useState(() => ({
     addNote: addNote(dispatch),
@@ -48,6 +49,13 @@ export const NotesContextProvider = ({children}) => {
     setEditItem(null)
   }
 
+  const setActiveNoteById = id => {
+    if(id !== undefined) {
+      return setActiveNote(state.find(item => item.id === id))
+    }
+    return setActiveNote(null)
+  }
+
   const contextValues = {
     state,
     submitEdit,
@@ -57,6 +65,8 @@ export const NotesContextProvider = ({children}) => {
     backToForm,
     previewMode,
     actions,
+    setActiveNoteById,
+    activeNote,
   }
 
   return (

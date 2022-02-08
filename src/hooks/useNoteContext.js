@@ -11,6 +11,8 @@ const useNoteContext = () => {
     backToForm,
     previewMode,
     actions,
+    setActiveNoteById,
+    activeNote,
   } = useContext(NoteContext);
 
   return {
@@ -22,6 +24,8 @@ const useNoteContext = () => {
     backToForm,
     previewMode,
     actions,
+    setActiveNoteById,
+    activeNote,
   }
 }
 
