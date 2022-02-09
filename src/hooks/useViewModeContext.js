@@ -5,15 +5,15 @@ const useViewModeContext = () => {
   const {
     isEdit,
     isPreview,
-    onEdit,
-    onPreview,
+    toggleEdit,
+    togglePreview,
   } = useContext(ViewModeContext)
 
   return {
     isEdit,
     isPreview,
-    onEdit,
-    onPreview,
+    toggleEdit,
+    togglePreview,
   }
 }
 

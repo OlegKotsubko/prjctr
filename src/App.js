@@ -15,6 +15,7 @@ function App() {
   const {
     isEdit,
     isPreview,
+    toggleEdit,
   } = useViewModeContext()
 
   return (
@@ -22,15 +23,16 @@ function App() {
       <div>
         {isPreview && <FullViewNote />}
 
-        {activeNote && isEdit &&
+        {isEdit &&
           <Form
             formTitle={activeNote.title}
             formDescription={activeNote.description}
             itemID={activeNote.id}
             formSubmitHandler={actions.editNote}
+            callback={toggleEdit}
+            isEdit={isEdit}
           />
         }
-
         {!isEdit && !isPreview &&
           <Form
             formTitle=""
@@ -39,7 +41,6 @@ function App() {
             formSubmitHandler={actions.addNote}
           />
         }
-
       </div>
       <div>
         <NotesList />

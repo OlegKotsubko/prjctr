@@ -11,21 +11,17 @@ import validateTitle from "../../helpers/validateTitle";
 import validateDescription from "../../helpers/validateDescription";
 
 import styles from './Form.module.scss'
-import useViewModeContext from "../../hooks/useViewModeContext";
 
 const Form = ({
   formTitle,
   formDescription,
   itemID,
   formSubmitHandler,
+  callback = () => {},
+  isEdit = false,
 }) => {
   const [title, setTitle] = useState(formTitle);
   const [description, setDescription] = useState(formDescription);
-
-  const {
-    isEdit,
-    onEdit,
-  } = useViewModeContext()
 
   const [showErrors, setShowErrors] = useState({
     title: false,
@@ -55,10 +51,7 @@ const Form = ({
 
     formSubmitHandler(title, description, itemID)
     clearForm()
-
-    if(isEdit) {
-      return onEdit()
-    }
+    callback()
   }
 
   return (

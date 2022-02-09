@@ -6,14 +6,14 @@ import {
 export const ViewModeContext = createContext({})
 
 export const ViewModeContextProvider = ({children}) => {
-  const [isEdit, setEdit] = useState(null)
-  const [isPreview, setPreview] = useState(null)
+  const [isEdit, setEdit] = useState(false)
+  const [isPreview, setPreview] = useState(false)
 
-  const onEdit = () => {
+  const toggleEdit = () => {
     setEdit(!isEdit)
   }
 
-  const onPreview = () => {
+  const togglePreview = () => {
     setPreview(!isPreview)
   }
 
@@ -21,8 +21,8 @@ export const ViewModeContextProvider = ({children}) => {
     <ViewModeContext.Provider value={{
       isEdit,
       isPreview,
-      onEdit,
-      onPreview,
+      toggleEdit,
+      togglePreview,
     }}>
       {children}
     </ViewModeContext.Provider>

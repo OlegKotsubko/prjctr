@@ -14,13 +14,15 @@ const Note = ({
 }) => {
   const {
     setActiveNoteById,
+    deleteActiveNote,
     activeNote,
   } = useNoteContext();
 
   const {
-    onEdit,
-    onPreview,
+    toggleEdit,
+    togglePreview,
     isPreview,
+    isEdit,
   } = useViewModeContext()
 
   const isCurrent = activeNote?.id === id
@@ -29,37 +31,41 @@ const Note = ({
     <div
       className={classNames(styles.block, isCurrent && isPreview && styles.active)}
       onClick={() => {
-        onPreview()
+        togglePreview()
         setActiveNoteById(id)
       }}
     >
       <h3 className={styles.title}>{title}</h3>
       <div className={styles.content}>{description}</div>
       <div className={styles.footer}>
-        {!isPreview &&
-          <>
-            <Button
-              clickHandler={(e) => {
-                e.stopPropagation();
-                setActiveNoteById(id)
-                onEdit()
-              }}
-              type="button"
-            >
-              Edit
-            </Button>
-            <Button
-              clickHandler={(e) => {
-                e.stopPropagation();
-                noteRemoveHandler(id)
-              }}
-              mod="danger"
-              type="button"
-            >
-              Delete
-            </Button>
-          </>
-        }
+        <Button
+          clickHandler={(e) => {
+            e.stopPropagation();
+            setActiveNoteById(id);
+            toggleEdit()
+          }}
+          type="button"
+        >
+          {isEdit && isCurrent ? 'Cancel' : 'Edit' }
+        </Button>
+        <Button
+          clickHandler={(e) => {
+            e.stopPropagation();
+            noteRemoveHandler(id)
+            deleteActiveNote()
+
+            if(isEdit && isCurrent) {
+              toggleEdit()
+            }
+            if(isPreview && isCurrent) {
+              togglePreview()
+            }
+          }}
+          mod="danger"
+          type="button"
+        >
+          Delete
+        </Button>
       </div>
     </div>
   )
