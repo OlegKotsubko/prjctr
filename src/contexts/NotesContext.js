@@ -9,8 +9,8 @@ import {
   addNote,
   editNote,
   deleteNote
-} from "../actions/actions";
-import notesReducer from '../reducer/reducer'
+} from "../actions/notes-actions";
+import notesReducer from '../reducer/notes-reducer'
 import mockData from "./mockData";
 
 export const NoteContext = createContext([])

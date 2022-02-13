@@ -1,28 +1,29 @@
 import {
-  createContext,
+  createContext, useReducer,
   useState,
 } from "react";
+import viewReducer from "../reducer/view-reducer";
+import {setPreview, setEdit, setDefault} from "../actions/view-actions";
 
 export const ViewModeContext = createContext({})
 
+export const initialState = {
+  mode: 'DEFAULT'
+};
+
 export const ViewModeContextProvider = ({children}) => {
-  const [isEdit, setEdit] = useState(false)
-  const [isPreview, setPreview] = useState(false)
+  const [mode, dispatch] = useReducer(viewReducer, initialState, () => undefined);
 
-  const toggleEdit = () => {
-    setEdit(!isEdit)
-  }
-
-  const togglePreview = () => {
-    setPreview(!isPreview)
-  }
+  const [modeActions] = useState(() => ({
+    onPreview: setPreview(dispatch),
+    onEdit: setEdit(dispatch),
+    onDefaultView: setDefault(dispatch),
+  }))
 
   return (
     <ViewModeContext.Provider value={{
-      isEdit,
-      isPreview,
-      toggleEdit,
-      togglePreview,
+      mode,
+      modeActions,
     }}>
       {children}
     </ViewModeContext.Provider>

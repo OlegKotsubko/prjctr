@@ -1,49 +1,38 @@
 import Content from "./components/Content/Content";
-import Form from "./components/Form/Form";
 import NotesList from "./components/NotesList/NotesList";
 import FullViewNote from "./components/FullViewNote/FullViewNote";
 
-import useNoteContext from "./hooks/useNoteContext";
 import useViewModeContext from "./hooks/useViewModeContext";
+import FormContainer from "./components/FormContainer/FormContainer";
 
 function App() {
-  const {
-    actions,
-    activeNote,
-  } = useNoteContext();
+  const { mode, modeActions } = useViewModeContext()
 
-  const {
-    isEdit,
-    isPreview,
-    toggleEdit,
-  } = useViewModeContext()
+  const LeftSidebar = () => {
+    switch (mode) {
+    case "PREVIEW":
+        return (
+          <FullViewNote
+            onDefaultView={modeActions.onDefaultView}
+          />
+        )
+    default:
+      return (
+        <FormContainer
+          mode={mode}
+          modeAction={modeActions}
+        />
+      )
+    }
+  }
 
   return (
     <Content>
       <div>
-        {isPreview && <FullViewNote />}
-
-        {isEdit &&
-          <Form
-            formTitle={activeNote.title}
-            formDescription={activeNote.description}
-            itemID={activeNote.id}
-            formSubmitHandler={actions.editNote}
-            callback={toggleEdit}
-            isEdit={isEdit}
-          />
-        }
-        {!isEdit && !isPreview &&
-          <Form
-            formTitle=""
-            formDescription=""
-            itemID=""
-            formSubmitHandler={actions.addNote}
-          />
-        }
+        <LeftSidebar/>
       </div>
       <div>
-        <NotesList />
+        <NotesList/>
       </div>
     </Content>
   );

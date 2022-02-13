@@ -19,20 +19,22 @@ const Note = ({
   } = useNoteContext();
 
   const {
-    toggleEdit,
-    togglePreview,
-    isPreview,
-    isEdit,
+    mode,
+    modeActions: {
+      onPreview,
+      onDefaultView,
+      onEdit,
+    }
   } = useViewModeContext()
 
   const isCurrent = activeNote?.id === id
 
   return (
     <div
-      className={classNames(styles.block, isCurrent && isPreview && styles.active)}
+      className={classNames(styles.block)}
       onClick={() => {
-        togglePreview()
-        setActiveNoteById(id)
+        onPreview()
+        setActiveNoteById(id);
       }}
     >
       <h3 className={styles.title}>{title}</h3>
@@ -42,24 +44,22 @@ const Note = ({
           clickHandler={(e) => {
             e.stopPropagation();
             setActiveNoteById(id);
-            toggleEdit()
+            if(mode === "EDIT") {
+              return onDefaultView()
+            }
+
+            onEdit()
           }}
           type="button"
         >
-          {isEdit && isCurrent ? 'Cancel' : 'Edit' }
+          {isCurrent && mode === "EDIT" ? 'Cancel' : 'Edit' }
         </Button>
         <Button
           clickHandler={(e) => {
             e.stopPropagation();
             noteRemoveHandler(id)
             deleteActiveNote()
-
-            if(isEdit && isCurrent) {
-              toggleEdit()
-            }
-            if(isPreview && isCurrent) {
-              togglePreview()
-            }
+            onDefaultView()
           }}
           mod="danger"
           type="button"

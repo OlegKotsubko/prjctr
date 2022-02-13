@@ -3,17 +3,13 @@ import { ViewModeContext } from "../contexts/ViewModeContext";
 
 const useViewModeContext = () => {
   const {
-    isEdit,
-    isPreview,
-    toggleEdit,
-    togglePreview,
+    mode,
+    modeActions,
   } = useContext(ViewModeContext)
 
   return {
-    isEdit,
-    isPreview,
-    toggleEdit,
-    togglePreview,
+    mode,
+    modeActions,
   }
 }
 

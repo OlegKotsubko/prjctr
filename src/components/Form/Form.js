@@ -11,18 +11,19 @@ import validateTitle from "../../helpers/validateTitle";
 import validateDescription from "../../helpers/validateDescription";
 
 import styles from './Form.module.scss'
+import useViewModeContext from "../../hooks/useViewModeContext";
 
 const Form = ({
   formTitle,
   formDescription,
   itemID,
   formSubmitHandler,
-  callback = () => {},
-  isEdit = false,
+  mode,
 }) => {
   const [title, setTitle] = useState(formTitle);
   const [description, setDescription] = useState(formDescription);
 
+  const { modeActions } = useViewModeContext()
   const [showErrors, setShowErrors] = useState({
     title: false,
     description: false
@@ -38,6 +39,7 @@ const Form = ({
       title: false,
       description: false
     })
+    modeActions.onDefaultView();
   }
 
   const submitHandler = () => {
@@ -51,12 +53,11 @@ const Form = ({
 
     formSubmitHandler(title, description, itemID)
     clearForm()
-    callback()
   }
 
   return (
     <div className={styles.block}>
-      <h1>{isEdit ? "Edit note" : "Create new note"}</h1>
+      <h1>{mode === 'EDIT' ? "Edit note" : "Create new note"}</h1>
       <form>
         <div className={styles.offset}>
           <Input
@@ -87,7 +88,7 @@ const Form = ({
             clickHandler={submitHandler}
             type="button"
           >
-            {isEdit ? "Save": "Create"}
+            {mode === 'EDIT' ? "Save": "Create"}
           </Button>
           <Button
             clickHandler={clearForm}

@@ -6,7 +6,7 @@ import useNoteContext from "../../hooks/useNoteContext";
 const NotesList = () => {
   const {state, actions} = useNoteContext();
 
-  return(
+  return (
     <div>
       <div className={styles.header}>
         <h1>Notes</h1>

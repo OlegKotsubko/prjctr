@@ -3,12 +3,14 @@ import Button from "../Button/Button";
 import useNoteContext from "../../hooks/useNoteContext";
 
 import styles from './FullViewNote.module.scss'
-import useViewModeContext from "../../hooks/useViewModeContext";
 
-const FullViewNote = () => {
-  const {activeNote, deleteActiveNote} = useNoteContext();
-
-  const {togglePreview} = useViewModeContext()
+const FullViewNote = ({
+  onDefaultView,
+}) => {
+  const {
+    activeNote,
+    deleteActiveNote
+  } = useNoteContext();
 
   const contentClickHandler = (e) => {
     if(e.target.tagName === 'A' && !window.confirm('Do you want to open this link?')) {
@@ -21,7 +23,7 @@ const FullViewNote = () => {
         <h1>{activeNote?.title}</h1>
         <Button clickHandler={() => {
           deleteActiveNote()
-          togglePreview()
+          onDefaultView()
         }}>Back</Button>
       </div>
       <div
