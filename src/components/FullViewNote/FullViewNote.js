@@ -1,37 +1,49 @@
 import Button from "../Button/Button";
+import {
+  useNavigate,
+  useParams,
+} from 'react-router-dom'
 
 import useNoteContext from "../../hooks/useNoteContext";
 
 import styles from './FullViewNote.module.scss'
+import useViewModeContext from "../../hooks/useViewModeContext";
+import Content from "../Content/Content";
 
-const FullViewNote = ({
-  onDefaultView,
-}) => {
+const FullViewNote = () => {
   const {
-    activeNote,
-    deleteActiveNote
+    state,
   } = useNoteContext();
+
+  const { modeActions } = useViewModeContext()
+  const navigate = useNavigate()
+  const {id} = useParams()
+
+  const activeNote = () => {
+    return state.find(item => item.id === Number(id))
+  }
 
   const contentClickHandler = (e) => {
     if(e.target.tagName === 'A' && !window.confirm('Do you want to open this link?')) {
       e.preventDefault()
     }
   }
+
   return (
-    <div>
+    <Content>
       <div className={styles.header}>
-        <h1>{activeNote?.title}</h1>
+        <h1>{activeNote().title}</h1>
         <Button clickHandler={() => {
-          deleteActiveNote()
-          onDefaultView()
+          modeActions.onDefaultView()
+          navigate('/notes')
         }}>Back</Button>
       </div>
       <div
         onClick={(e) => contentClickHandler(e)}
         className={styles.body}
-        dangerouslySetInnerHTML={{ __html: activeNote?.sanitizedHTML }}
+        dangerouslySetInnerHTML={{ __html: activeNote().sanitizedHTML }}
       />
-    </div>
+    </Content>
   )
 }
 

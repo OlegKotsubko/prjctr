@@ -1,10 +1,11 @@
 import classNames from 'classnames'
 
 import Button from "../Button/Button";
-import useNoteContext from "../../hooks/useNoteContext";
 
 import styles from './Note.module.scss'
-import useViewModeContext from "../../hooks/useViewModeContext";
+import {
+  useNavigate,
+} from "react-router-dom";
 
 const Note = ({
   id,
@@ -12,29 +13,12 @@ const Note = ({
   description,
   noteRemoveHandler,
 }) => {
-  const {
-    setActiveNoteById,
-    deleteActiveNote,
-    activeNote,
-  } = useNoteContext();
-
-  const {
-    mode,
-    modeActions: {
-      onPreview,
-      onDefaultView,
-      onEdit,
-    }
-  } = useViewModeContext()
-
-  const isCurrent = activeNote?.id === id
-
+  const navigate = useNavigate()
   return (
     <div
       className={classNames(styles.block)}
       onClick={() => {
-        onPreview()
-        setActiveNoteById(id);
+        navigate(`/note/${id}`)
       }}
     >
       <h3 className={styles.title}>{title}</h3>
@@ -43,23 +27,16 @@ const Note = ({
         <Button
           clickHandler={(e) => {
             e.stopPropagation();
-            setActiveNoteById(id);
-            if(mode === "EDIT") {
-              return onDefaultView()
-            }
-
-            onEdit()
+            navigate(`/form/${id}`)
           }}
           type="button"
         >
-          {isCurrent && mode === "EDIT" ? 'Cancel' : 'Edit' }
+          Edit
         </Button>
         <Button
           clickHandler={(e) => {
             e.stopPropagation();
             noteRemoveHandler(id)
-            deleteActiveNote()
-            onDefaultView()
           }}
           mod="danger"
           type="button"

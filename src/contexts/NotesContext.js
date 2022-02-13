@@ -31,7 +31,7 @@ export const NotesContextProvider = ({children}) => {
     localStorage.setItem('notes', JSON.stringify(state))
   }, [state])
 
-  const setActiveNoteById = id => {
+  const setActiveNoteById = (id) => {
     setActiveNote(state.find(item => item.id === id))
   }
 

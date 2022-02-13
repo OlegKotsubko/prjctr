@@ -2,12 +2,13 @@ import styles from './NotesList.module.scss'
 import Note from "../Note/Note";
 
 import useNoteContext from "../../hooks/useNoteContext";
+import Content from "../Content/Content";
 
 const NotesList = () => {
   const {state, actions} = useNoteContext();
 
   return (
-    <div>
+    <Content>
       <div className={styles.header}>
         <h1>Notes</h1>
       </div>
@@ -22,7 +23,7 @@ const NotesList = () => {
           />
         ))}
       </div>
-    </div>
+    </Content>
   )
 }
 
