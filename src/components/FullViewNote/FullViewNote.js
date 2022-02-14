@@ -3,10 +3,9 @@ import Button from "../Button/Button";
 import useNoteContext from "../../hooks/useNoteContext";
 
 import styles from './FullViewNote.module.scss'
+import Content from "../Content/Content";
 
-const FullViewNote = ({
-  onDefaultView,
-}) => {
+const FullViewNote = () => {
   const {
     activeNote,
     deleteActiveNote
@@ -18,12 +17,11 @@ const FullViewNote = ({
     }
   }
   return (
-    <div>
+    <Content>
       <div className={styles.header}>
         <h1>{activeNote?.title}</h1>
         <Button clickHandler={() => {
           deleteActiveNote()
-          onDefaultView()
         }}>Back</Button>
       </div>
       <div
@@ -31,7 +29,7 @@ const FullViewNote = ({
         className={styles.body}
         dangerouslySetInnerHTML={{ __html: activeNote?.sanitizedHTML }}
       />
-    </div>
+    </Content>
   )
 }
 

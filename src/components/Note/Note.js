@@ -1,4 +1,5 @@
 import classNames from 'classnames'
+import { useNavigate } from "react-router-dom";
 
 import Button from "../Button/Button";
 import useNoteContext from "../../hooks/useNoteContext";
@@ -15,11 +16,9 @@ const Note = ({
   const {
     setActiveNoteById,
     deleteActiveNote,
-    activeNote,
   } = useNoteContext();
 
   const {
-    mode,
     modeActions: {
       onPreview,
       onDefaultView,
@@ -27,7 +26,7 @@ const Note = ({
     }
   } = useViewModeContext()
 
-  const isCurrent = activeNote?.id === id
+  const navigate = useNavigate()
 
   return (
     <div
@@ -44,15 +43,12 @@ const Note = ({
           clickHandler={(e) => {
             e.stopPropagation();
             setActiveNoteById(id);
-            if(mode === "EDIT") {
-              return onDefaultView()
-            }
-
             onEdit()
+            navigate(`/form/${id}`)
           }}
           type="button"
         >
-          {isCurrent && mode === "EDIT" ? 'Cancel' : 'Edit' }
+          Edit
         </Button>
         <Button
           clickHandler={(e) => {

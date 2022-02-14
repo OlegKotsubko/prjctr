@@ -12,6 +12,9 @@ import {
 } from "../actions/notes-actions";
 import notesReducer from '../reducer/notes-reducer'
 import mockData from "./mockData";
+import {
+  useNavigate, useParams,
+} from "react-router-dom";
 
 export const NoteContext = createContext([])
 
@@ -20,6 +23,9 @@ const storage = localStorage.getItem('notes') ? JSON.parse(localStorage.getItem(
 export const NotesContextProvider = ({children}) => {
   const [state, dispatch] = useReducer(notesReducer, storage)
   const [activeNote, setActiveNote] = useState(null)
+
+  const navigate = useNavigate()
+  const {id} = useParams();
 
   const [actions] = useState(() => ({
     addNote: addNote(dispatch),
@@ -33,10 +39,13 @@ export const NotesContextProvider = ({children}) => {
 
   const setActiveNoteById = id => {
     setActiveNote(state.find(item => item.id === id))
+    navigate(`/note/${id}`)
+    console.log(id)
   }
 
   const deleteActiveNote = () => {
     setActiveNote(null)
+    navigate('/')
   }
 
   const contextValues = {
