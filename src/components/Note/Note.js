@@ -1,31 +1,20 @@
 import classNames from 'classnames'
 
 import Button from "../Button/Button";
-import useNoteContext from "../../hooks/useNoteContext";
 
 import styles from './Note.module.scss'
-import useViewModeContext from "../../hooks/useViewModeContext";
 
 const Note = ({
   id,
   title,
   description,
   noteRemoveHandler,
+  viewModeActions,
+  setActiveNoteById,
+  deleteActiveNote,
+  activeNote,
+  isEdit,
 }) => {
-  const {
-    setActiveNoteById,
-    deleteActiveNote,
-    activeNote,
-  } = useNoteContext();
-
-  const {
-    mode,
-    modeActions: {
-      onPreview,
-      onDefaultView,
-      onEdit,
-    }
-  } = useViewModeContext()
 
   const isCurrent = activeNote?.id === id
 
@@ -33,7 +22,7 @@ const Note = ({
     <div
       className={classNames(styles.block)}
       onClick={() => {
-        onPreview()
+        viewModeActions.setPreviewMode()
         setActiveNoteById(id);
       }}
     >
@@ -44,22 +33,22 @@ const Note = ({
           clickHandler={(e) => {
             e.stopPropagation();
             setActiveNoteById(id);
-            if(mode === "EDIT") {
-              return onDefaultView()
+            if(isEdit) {
+              return viewModeActions.setDefaultMode()
             }
 
-            onEdit()
+            return viewModeActions.setEditMode()
           }}
           type="button"
         >
-          {isCurrent && mode === "EDIT" ? 'Cancel' : 'Edit' }
+          {isCurrent && isEdit ? 'Cancel' : 'Edit' }
         </Button>
         <Button
           clickHandler={(e) => {
             e.stopPropagation();
             noteRemoveHandler(id)
             deleteActiveNote()
-            onDefaultView()
+            viewModeActions.setDefaultMode()
           }}
           mod="danger"
           type="button"

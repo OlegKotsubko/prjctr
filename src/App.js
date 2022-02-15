@@ -3,26 +3,57 @@ import NotesList from "./components/NotesList/NotesList";
 import FullViewNote from "./components/FullViewNote/FullViewNote";
 
 import useViewModeContext from "./hooks/useViewModeContext";
-import FormContainer from "./components/FormContainer/FormContainer";
+import {MODE} from "./reducer/view-reducer";
+import useNoteContext from "./hooks/useNoteContext";
+import Form from "./components/Form/Form";
 
 function App() {
-  const { mode, modeActions } = useViewModeContext()
+  const {
+    mode,
+    modeActions
+  } = useViewModeContext()
+  const {
+    state,
+    actions,
+    activeNote,
+    setActiveNoteById,
+    deleteActiveNote,
+  } = useNoteContext();
 
   const LeftSidebar = () => {
     switch (mode) {
-    case "PREVIEW":
+      case MODE.PREVIEW:
+          return (
+            <FullViewNote
+              setViewModeToDefault={modeActions.setDefaultMode}
+              activeNote={activeNote}
+              deleteActiveNote={deleteActiveNote}
+            />
+          )
+      case MODE.DEFAULT:
         return (
-          <FullViewNote
-            onDefaultView={modeActions.onDefaultView}
+          <Form
+            formTitle=""
+            formDescription=""
+            itemID=""
+            formSubmitHandler={actions.addNote}
+            setViewModeToDefault={modeActions.setDefaultMode}
           />
         )
-    default:
-      return (
-        <FormContainer
-          mode={mode}
-          modeAction={modeActions}
-        />
-      )
+      case MODE.EDIT:
+          return (
+            <Form
+              formTitle={activeNote.title}
+              formDescription={activeNote.description}
+              itemID={activeNote.id}
+              formSubmitHandler={actions.editNote}
+              setViewModeToDefault={modeActions.setDefaultMode}
+              deleteActiveNote={deleteActiveNote}
+              mode={mode}
+            />
+          )
+      default:
+        return false
     }
   }
 
@@ -32,7 +63,16 @@ function App() {
         <LeftSidebar/>
       </div>
       <div>
-        <NotesList/>
+        <NotesList
+          notes={state}
+          notesActions={actions}
+          viewModeActions={modeActions}
+          setActiveNoteById={setActiveNoteById}
+          deleteActiveNote={deleteActiveNote}
+          noteRemoveHandler={actions.deleteNote}
+          activeNote={activeNote}
+          isEdit={mode === MODE.EDIT}
+        />
       </div>
     </Content>
   );

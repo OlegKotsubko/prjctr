@@ -1,18 +1,18 @@
-export const SET_PREVIEW = "SET_PREVIEW"
-export const SET_EDIT = "SET_EDIT"
-export const SET_DEFAULT = "SET_DEFAULT"
+export const SET_PREVIEW_ROUTE_MODE = "SET_PREVIEW_ROUTE_MODE"
+export const SET_EDIT_ROUTE_MODE = "SET_EDIT_ROUTE_MODE"
+export const SET_DEFAULT_ROUTE_MODE = "SET_DEFAULT_ROUTE_MODE"
 
-export const setPreview = (dispatch) => () =>
+export const setPreviewMode = (dispatch) => () =>
   dispatch({
-    type: SET_PREVIEW,
+    type: SET_PREVIEW_ROUTE_MODE,
   });
 
-export const setEdit = (dispatch) => () =>
+export const setEditMode = (dispatch) => () =>
   dispatch({
-    type: SET_EDIT,
+    type: SET_EDIT_ROUTE_MODE,
   });
 
-export const setDefault = (dispatch) => () =>
+export const setDefaultMode = (dispatch) => () =>
   dispatch({
-    type: SET_DEFAULT,
+    type: SET_DEFAULT_ROUTE_MODE,
   });

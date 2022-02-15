@@ -11,7 +11,6 @@ import validateTitle from "../../helpers/validateTitle";
 import validateDescription from "../../helpers/validateDescription";
 
 import styles from './Form.module.scss'
-import useViewModeContext from "../../hooks/useViewModeContext";
 
 const Form = ({
   formTitle,
@@ -19,11 +18,11 @@ const Form = ({
   itemID,
   formSubmitHandler,
   mode,
+  setViewModeToDefault,
 }) => {
   const [title, setTitle] = useState(formTitle);
   const [description, setDescription] = useState(formDescription);
 
-  const { modeActions } = useViewModeContext()
   const [showErrors, setShowErrors] = useState({
     title: false,
     description: false
@@ -39,7 +38,7 @@ const Form = ({
       title: false,
       description: false
     })
-    modeActions.onDefaultView();
+    setViewModeToDefault()
   }
 
   const submitHandler = () => {
