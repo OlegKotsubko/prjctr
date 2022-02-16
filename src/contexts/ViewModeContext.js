@@ -10,7 +10,7 @@ export const ViewModeContext = createContext({})
 export const ViewModeContextProvider = ({children}) => {
   const [mode, dispatch] = useReducer(viewReducer, {}, () => MODE.DEFAULT);
 
-  const [modeActions] = useState(() => ({
+  const [actions] = useState(() => ({
     setPreviewMode: setPreviewMode(dispatch),
     setEditMode: setEditMode(dispatch),
     setDefaultMode: setDefaultMode(dispatch),
@@ -19,7 +19,7 @@ export const ViewModeContextProvider = ({children}) => {
   return (
     <ViewModeContext.Provider value={{
       mode,
-      modeActions,
+      actions,
     }}>
       {children}
     </ViewModeContext.Provider>

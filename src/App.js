@@ -10,7 +10,7 @@ import Form from "./components/Form/Form";
 function App() {
   const {
     mode,
-    modeActions
+    actions: modeActions
   } = useViewModeContext()
   const {
     state,

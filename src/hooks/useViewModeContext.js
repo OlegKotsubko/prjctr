@@ -4,12 +4,12 @@ import { ViewModeContext } from "../contexts/ViewModeContext";
 const useViewModeContext = () => {
   const {
     mode,
-    modeActions,
+    actions,
   } = useContext(ViewModeContext)
 
   return {
     mode,
-    modeActions,
+    actions,
   }
 }
 
