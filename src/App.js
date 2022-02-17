@@ -26,6 +26,11 @@ function App() {
     setActiveNoteById(id);
   }
 
+  const onResetActivation = () => {
+    modeActions.setDefaultMode()
+    deleteActiveNote()
+  }
+
   const onEdit = (id) => {
     setActiveNoteById(id);
     if(mode === VIEW_MODE.EDIT) {
@@ -46,9 +51,8 @@ function App() {
       case VIEW_MODE.PREVIEW:
           return (
             <FullViewNote
-              setViewModeToDefault={modeActions.setDefaultMode}
+              onResetActivation={onResetActivation}
               activeNote={activeNote}
-              deleteActiveNote={deleteActiveNote}
             />
           )
       case VIEW_MODE.DEFAULT:

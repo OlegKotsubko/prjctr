@@ -3,9 +3,8 @@ import Button from "../Button/Button";
 import styles from './FullViewNote.module.scss'
 
 const FullViewNote = ({
-  setViewModeToDefault,
+  onResetActivation,
   activeNote,
-  deleteActiveNote,
 }) => {
 
   const contentClickHandler = (e) => {
@@ -18,8 +17,7 @@ const FullViewNote = ({
       <div className={styles.header}>
         <h1>{activeNote?.title}</h1>
         <Button clickHandler={() => {
-          deleteActiveNote()
-          setViewModeToDefault()
+          onResetActivation()
         }}>Back</Button>
       </div>
       <div
