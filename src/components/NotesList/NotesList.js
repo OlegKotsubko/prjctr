@@ -4,12 +4,10 @@ import Note from "../Note/Note";
 
 const NotesList = ({
  notes,
- notesActions,
- viewModeActions,
- setActiveNoteById,
- deleteActiveNote,
- noteRemoveHandler,
- activeNote,
+ onActivate,
+ onEdit,
+ onDelete,
+ activeNoteId,
  isEdit,
 }) => (
   <div>
@@ -23,12 +21,10 @@ const NotesList = ({
           id={id}
           title={title}
           description={rawTextFromHTML}
-          notesActions={notesActions}
-          viewModeActions={viewModeActions}
-          setActiveNoteById={setActiveNoteById}
-          deleteActiveNote={deleteActiveNote}
-          noteRemoveHandler={noteRemoveHandler}
-          activeNote={activeNote}
+          onActivate={onActivate}
+          onEdit={onEdit}
+          onDelete={onDelete}
+          activeNoteId={activeNoteId}
           isEdit={isEdit}
         />
       ))}

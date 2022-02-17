@@ -3,7 +3,7 @@ import NotesList from "./components/NotesList/NotesList";
 import FullViewNote from "./components/FullViewNote/FullViewNote";
 
 import useViewModeContext from "./hooks/useViewModeContext";
-import {MODE} from "./reducer/view-reducer";
+import {VIEW_MODE} from "./reducer/view-reducer";
 import useNoteContext from "./hooks/useNoteContext";
 import Form from "./components/Form/Form";
 
@@ -20,9 +20,30 @@ function App() {
     deleteActiveNote,
   } = useNoteContext();
 
+  // TODO Think where I can store this eventHandlers
+  const onActivate = (id) => {
+    modeActions.setPreviewMode()
+    setActiveNoteById(id);
+  }
+
+  const onEdit = (id) => {
+    setActiveNoteById(id);
+    if(mode === VIEW_MODE.EDIT) {
+      return modeActions.setDefaultMode()
+    }
+
+    return modeActions.setEditMode()
+  }
+
+  const onDelete = (id) => {
+    actions.deleteNote(id)
+    deleteActiveNote()
+    modeActions.setDefaultMode()
+  }
+
   const LeftSidebar = () => {
     switch (mode) {
-      case MODE.PREVIEW:
+      case VIEW_MODE.PREVIEW:
           return (
             <FullViewNote
               setViewModeToDefault={modeActions.setDefaultMode}
@@ -30,7 +51,7 @@ function App() {
               deleteActiveNote={deleteActiveNote}
             />
           )
-      case MODE.DEFAULT:
+      case VIEW_MODE.DEFAULT:
         return (
           <Form
             formTitle=""
@@ -40,7 +61,7 @@ function App() {
             setViewModeToDefault={modeActions.setDefaultMode}
           />
         )
-      case MODE.EDIT:
+      case VIEW_MODE.EDIT:
           return (
             <Form
               formTitle={activeNote.title}
@@ -65,13 +86,11 @@ function App() {
       <div>
         <NotesList
           notes={state}
-          notesActions={actions}
-          viewModeActions={modeActions}
-          setActiveNoteById={setActiveNoteById}
-          deleteActiveNote={deleteActiveNote}
-          noteRemoveHandler={actions.deleteNote}
-          activeNote={activeNote}
-          isEdit={mode === MODE.EDIT}
+          onActivate={onActivate}
+          onEdit={onEdit}
+          onDelete={onDelete}
+          activeNoteId={activeNote?.id}
+          isEdit={mode === VIEW_MODE.EDIT}
         />
       </div>
     </Content>

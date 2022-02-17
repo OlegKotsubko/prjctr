@@ -4,7 +4,7 @@ import {
   SET_EDIT_ROUTE_MODE,
 } from "../actions/view-actions";
 
-export const MODE = {
+export const VIEW_MODE = {
   EDIT: "EDIT",
   PREVIEW: "PREVIEW",
   DEFAULT: "DEFAULT"
@@ -13,11 +13,11 @@ export const MODE = {
 const viewReducer = (_, event) => {
   switch (event.type) {
     case SET_EDIT_ROUTE_MODE:
-      return MODE.EDIT
+      return VIEW_MODE.EDIT
     case SET_PREVIEW_ROUTE_MODE:
-      return MODE.PREVIEW
+      return VIEW_MODE.PREVIEW
     case SET_DEFAULT_ROUTE_MODE:
-      return MODE.DEFAULT
+      return VIEW_MODE.DEFAULT
     default:
       return false
   }

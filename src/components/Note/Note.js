@@ -8,23 +8,19 @@ const Note = ({
   id,
   title,
   description,
-  noteRemoveHandler,
-  viewModeActions,
-  setActiveNoteById,
-  deleteActiveNote,
-  activeNote,
+  onActivate,
+  onEdit,
+  onDelete,
+  activeNoteId,
   isEdit,
 }) => {
 
-  const isCurrent = activeNote?.id === id
+  const isCurrent = activeNoteId === id
 
   return (
     <div
       className={classNames(styles.block)}
-      onClick={() => {
-        viewModeActions.setPreviewMode()
-        setActiveNoteById(id);
-      }}
+      onClick={() => onActivate(id)}
     >
       <h3 className={styles.title}>{title}</h3>
       <div className={styles.content}>{description}</div>
@@ -32,12 +28,7 @@ const Note = ({
         <Button
           clickHandler={(e) => {
             e.stopPropagation();
-            setActiveNoteById(id);
-            if(isEdit) {
-              return viewModeActions.setDefaultMode()
-            }
-
-            return viewModeActions.setEditMode()
+            onEdit(id)
           }}
           type="button"
         >
@@ -46,9 +37,7 @@ const Note = ({
         <Button
           clickHandler={(e) => {
             e.stopPropagation();
-            noteRemoveHandler(id)
-            deleteActiveNote()
-            viewModeActions.setDefaultMode()
+            onDelete(id)
           }}
           mod="danger"
           type="button"
