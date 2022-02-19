@@ -1,11 +1,11 @@
 import Content from "./components/Content/Content";
-import NotesList from "./components/NotesList/NotesList";
 import FullViewNote from "./components/FullViewNote/FullViewNote";
 
 import useViewModeContext from "./hooks/useViewModeContext";
 import {VIEW_MODE} from "./reducer/view-reducer";
 import useNoteContext from "./hooks/useNoteContext";
 import Form from "./components/Form/Form";
+import NoteListView from "./views/NoteListView";
 
 function App() {
   const {
@@ -20,38 +20,15 @@ function App() {
     deleteActiveNote,
   } = useNoteContext();
 
-  // TODO Think where I can store this eventHandlers
-  const onActivate = (id) => {
-    modeActions.setPreviewMode()
-    setActiveNoteById(id);
-  }
-
-  const onResetActivation = () => {
-    modeActions.setDefaultMode()
-    deleteActiveNote()
-  }
-
-  const onEdit = (id) => {
-    setActiveNoteById(id);
-    if(mode === VIEW_MODE.EDIT) {
-      return modeActions.setDefaultMode()
-    }
-
-    return modeActions.setEditMode()
-  }
-
-  const onDelete = (id) => {
-    actions.deleteNote(id)
-    deleteActiveNote()
-    modeActions.setDefaultMode()
-  }
-
   const LeftSidebar = () => {
     switch (mode) {
       case VIEW_MODE.PREVIEW:
           return (
             <FullViewNote
-              onResetActivation={onResetActivation}
+              onResetActivation={() => {
+                modeActions.setDefaultMode();
+                deleteActiveNote()
+              }}
               activeNote={activeNote}
             />
           )
@@ -88,13 +65,16 @@ function App() {
         <LeftSidebar/>
       </div>
       <div>
-        <NotesList
-          notes={state}
-          onActivate={onActivate}
-          onEdit={onEdit}
-          onDelete={onDelete}
+        <NoteListView
+          state={state}
           activeNoteId={activeNote?.id}
-          isEdit={mode === VIEW_MODE.EDIT}
+          setPreviewMode={modeActions.setPreviewMode}
+          setDefaultMode={modeActions.setDefaultMode}
+          setEditMode={modeActions.setEditMode}
+          setActiveNoteById={setActiveNoteById}
+          deleteNoteById={actions.deleteNote}
+          deleteActiveNote={deleteActiveNote}
+          ifEditNode={mode === VIEW_MODE.EDIT}
         />
       </div>
     </Content>

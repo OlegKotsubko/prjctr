@@ -16,9 +16,7 @@ const FullViewNote = ({
     <div>
       <div className={styles.header}>
         <h1>{activeNote?.title}</h1>
-        <Button clickHandler={() => {
-          onResetActivation()
-        }}>Back</Button>
+        <Button clickHandler={onResetActivation}>Back</Button>
       </div>
       <div
         onClick={(e) => contentClickHandler(e)}
