@@ -17,7 +17,7 @@ const Form = ({
   formDescription,
   itemID,
   formSubmitHandler,
-  mode,
+  isEdit,
   setViewModeToDefault,
 }) => {
   const [title, setTitle] = useState(formTitle);
@@ -56,7 +56,7 @@ const Form = ({
 
   return (
     <div className={styles.block}>
-      <h1>{mode === 'EDIT' ? "Edit note" : "Create new note"}</h1>
+      <h1>{isEdit ? "Edit note" : "Create new note"}</h1>
       <form>
         <div className={styles.offset}>
           <Input
@@ -87,7 +87,7 @@ const Form = ({
             clickHandler={submitHandler}
             type="button"
           >
-            {mode === 'EDIT' ? "Save": "Create"}
+            {isEdit ? "Save": "Create"}
           </Button>
           <Button
             clickHandler={clearForm}

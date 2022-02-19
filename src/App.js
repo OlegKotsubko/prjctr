@@ -40,6 +40,7 @@ function App() {
             itemID=""
             formSubmitHandler={actions.addNote}
             setViewModeToDefault={modeActions.setDefaultMode}
+            isEdit={false}
           />
         )
       case VIEW_MODE.EDIT:
@@ -51,7 +52,7 @@ function App() {
               formSubmitHandler={actions.editNote}
               setViewModeToDefault={modeActions.setDefaultMode}
               deleteActiveNote={deleteActiveNote}
-              mode={mode}
+              isEdit={true}
             />
           )
       default:
