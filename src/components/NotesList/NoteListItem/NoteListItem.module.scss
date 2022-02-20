@@ -1,0 +1,27 @@
+.block {
+  display: grid;
+  border: 1px solid #dadada;
+  padding: 16px;
+
+  &.active {
+    background: cadetblue;
+  }
+}
+
+.title {
+  margin-top: 0;
+  margin-bottom: 16px;
+  font-size: 32px;
+}
+
+.content {
+  overflow: hidden;
+  margin-bottom: 32px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.footer {
+  display: inline-flex;
+  gap: 16px;
+}

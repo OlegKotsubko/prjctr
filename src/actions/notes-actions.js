@@ -10,7 +10,6 @@ export const addNote = (dispatch) => (
     type: ADD_NOTE,
     title,
     description,
-    id: new Date().getTime()
   });
 
 export const editNote = (dispatch) => (

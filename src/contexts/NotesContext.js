@@ -19,8 +19,6 @@ const storage = localStorage.getItem('notes') ? JSON.parse(localStorage.getItem(
 
 export const NotesContextProvider = ({children}) => {
   const [state, dispatch] = useReducer(notesReducer, storage)
-  const [activeNote, setActiveNote] = useState(null)
-
   const [actions] = useState(() => ({
     addNote: addNote(dispatch),
     editNote: editNote(dispatch),
@@ -31,20 +29,14 @@ export const NotesContextProvider = ({children}) => {
     localStorage.setItem('notes', JSON.stringify(state))
   }, [state])
 
-  const setActiveNoteById = id => {
-    setActiveNote(state.find(item => item.id === id))
-  }
-
-  const deleteActiveNote = () => {
-    setActiveNote(null)
+  const getNoteById = id => {
+    return state.find(item => item.id === id)
   }
 
   const contextValues = {
     state,
     actions,
-    setActiveNoteById,
-    deleteActiveNote,
-    activeNote,
+    getNoteById,
   }
 
   return (

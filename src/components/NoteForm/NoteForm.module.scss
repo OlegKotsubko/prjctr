@@ -7,7 +7,8 @@
 }
 
 .footer {
-  display: inline-flex;
+  display: flex;
+  justify-content: flex-end;
   gap: 16px;
 }
 

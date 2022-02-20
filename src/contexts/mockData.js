@@ -71,6 +71,6 @@ const mockData = {
     '</ul>\n' +
     '<p><span style="color: #010e28;">The first CS:GO major tournament in two years will be held in Stockholm. The total prize pool of the competition is $2 million.</span></p>\n' +
     '</div></div></div>',
-  id: 0
+  id: '0'
 }
 export default mockData;
