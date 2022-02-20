@@ -10,15 +10,15 @@ import Input from "../Input/Input";
 import validateTitle from "../../helpers/validateTitle";
 import validateDescription from "../../helpers/validateDescription";
 
-import styles from './Form.module.scss'
+import styles from './NoteForm.module.scss'
 
-const Form = ({
+const NoteForm = ({
   formTitle,
   formDescription,
   itemID,
   formSubmitHandler,
+  onStepBack,
   isEdit,
-  setViewModeToDefault,
 }) => {
   const [title, setTitle] = useState(formTitle);
   const [description, setDescription] = useState(formDescription);
@@ -38,10 +38,10 @@ const Form = ({
       title: false,
       description: false
     })
-    setViewModeToDefault()
   }
 
-  const submitHandler = () => {
+  const submitHandler = (e) => {
+    e.preventDefault();
     if(titleErrors || descriptionErrors) {
       setShowErrors({
         title: !!titleErrors,
@@ -56,8 +56,14 @@ const Form = ({
 
   return (
     <div className={styles.block}>
+      <Button
+        mod="empty"
+        clickHandler={onStepBack}
+      >
+        Back
+      </Button>
       <h1>{isEdit ? "Edit note" : "Create new note"}</h1>
-      <form>
+      <form onSubmit={submitHandler}>
         <div className={styles.offset}>
           <Input
             type="text"
@@ -84,23 +90,21 @@ const Form = ({
         </div>
         <div className={styles.footer}>
           <Button
-            clickHandler={submitHandler}
-            type="button"
-          >
-            {isEdit ? "Save": "Create"}
-          </Button>
-          <Button
             clickHandler={clearForm}
             mod="empty"
             type="reset"
           >
             Clear form
           </Button>
+          <Button
+            type="submit"
+          >
+            {isEdit ? "Save": "Create"}
+          </Button>
         </div>
-
       </form>
     </div>
   )
 }
 
-export default React.memo(Form);
+export default React.memo(NoteForm);

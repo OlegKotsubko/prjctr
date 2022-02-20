@@ -5,17 +5,13 @@ const useNoteContext = () => {
   const {
     state,
     actions,
-    setActiveNoteById,
-    deleteActiveNote,
-    activeNote,
+    getNoteById,
   } = useContext(NoteContext);
 
   return {
     state,
     actions,
-    setActiveNoteById,
-    deleteActiveNote,
-    activeNote,
+    getNoteById,
   }
 }
 

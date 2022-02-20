@@ -1,14 +1,12 @@
 import styles from './NotesList.module.scss'
-import Note from "../Note/Note";
+import NoteListItem from "./NoteListItem/NoteListItem";
 
 
 const NotesList = ({
  notes,
- onActivate,
+                     onPreview,
  onEdit,
  onDelete,
- activeNoteId,
- isEdit,
 }) => (
   <div>
     <div className={styles.header}>
@@ -16,16 +14,14 @@ const NotesList = ({
     </div>
     <div className={styles.grid}>
       {notes.map(({title, rawTextFromHTML, id}) => (
-        <Note
+        <NoteListItem
           key={id}
           id={id}
           title={title}
           description={rawTextFromHTML}
-          onActivate={onActivate}
+          onPreview={onPreview}
           onEdit={onEdit}
           onDelete={onDelete}
-          activeNoteId={activeNoteId}
-          isEdit={isEdit}
         />
       ))}
     </div>

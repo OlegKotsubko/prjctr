@@ -1,4 +1,5 @@
 import {cleanHTML, replaceTags} from "../helpers/cleanHTML";
+import { v4 as uuid } from 'uuid';
 import {
   ADD_NOTE,
   EDIT_NOTE,
@@ -16,7 +17,7 @@ const notesReducer = (state, event) => {
           description: event.description,
           rawTextFromHTML: replaceTags(cleanHTML(event.description)),
           sanitizedHTML: cleanHTML(event.description),
-          id: event.id
+          id: uuid()
         }
       ]
     case EDIT_NOTE:

@@ -7,10 +7,11 @@ const Button = ({
   clickHandler,
   mod,
   type,
+  className,
   children,
 }) => {
   const attributes = isExternal ? 'noreferrer noopener' : null
-  const cssStyles = classNames(styles.block, styles[mod])
+  const cssStyles = classNames(styles.block, styles[mod], className)
 
   return (
     href
