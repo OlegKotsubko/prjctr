@@ -4,24 +4,18 @@ import { NoteContext } from "../contexts/NotesContext";
 const useNoteContext = () => {
   const {
     state,
-    submitEdit,
-    findNote,
-    editItem,
-    getNoteById,
-    backToForm,
-    previewMode,
     actions,
+    setActiveNoteById,
+    deleteActiveNote,
+    activeNote,
   } = useContext(NoteContext);
 
   return {
     state,
-    submitEdit,
-    findNote,
-    editItem,
-    getNoteById,
-    backToForm,
-    previewMode,
     actions,
+    setActiveNoteById,
+    deleteActiveNote,
+    activeNote,
   }
 }
 

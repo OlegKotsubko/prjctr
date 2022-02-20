@@ -3,7 +3,7 @@ import {
   ADD_NOTE,
   EDIT_NOTE,
   DELETE_NOTE
-} from "../actions/actions";
+} from "../actions/notes-actions";
 
 
 const notesReducer = (state, event) => {

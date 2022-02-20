@@ -9,8 +9,8 @@ import {
   addNote,
   editNote,
   deleteNote
-} from "../actions/actions";
-import notesReducer from '../reducer/reducer'
+} from "../actions/notes-actions";
+import notesReducer from '../reducer/notes-reducer'
 import mockData from "./mockData";
 
 export const NoteContext = createContext([])
@@ -19,8 +19,7 @@ const storage = localStorage.getItem('notes') ? JSON.parse(localStorage.getItem(
 
 export const NotesContextProvider = ({children}) => {
   const [state, dispatch] = useReducer(notesReducer, storage)
-  const [editItem, setEditItem] = useState(null)
-  const [previewMode, setPreviewMode] = useState(null)
+  const [activeNote, setActiveNote] = useState(null)
 
   const [actions] = useState(() => ({
     addNote: addNote(dispatch),
@@ -32,31 +31,20 @@ export const NotesContextProvider = ({children}) => {
     localStorage.setItem('notes', JSON.stringify(state))
   }, [state])
 
-  const findNote = id => {
-    setEditItem(state.find(item => item.id === id))
+  const setActiveNoteById = id => {
+    setActiveNote(state.find(item => item.id === id))
   }
 
-  const getNoteById = id => {
-    setPreviewMode(state.find(item => item.id === id))
-  }
-
-  const backToForm = () => {
-    setPreviewMode(null)
-  }
-
-  const submitEdit = () => {
-    setEditItem(null)
+  const deleteActiveNote = () => {
+    setActiveNote(null)
   }
 
   const contextValues = {
     state,
-    submitEdit,
-    findNote,
-    editItem,
-    getNoteById,
-    backToForm,
-    previewMode,
     actions,
+    setActiveNoteById,
+    deleteActiveNote,
+    activeNote,
   }
 
   return (

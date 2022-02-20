@@ -4,12 +4,15 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { NotesContextProvider } from "./contexts/NotesContext";
+import {ViewModeContextProvider} from "./contexts/ViewModeContext";
 
 
 ReactDOM.render(
   <React.StrictMode>
     <NotesContextProvider>
-      <App />
+      <ViewModeContextProvider>
+        <App />
+      </ViewModeContextProvider>
     </NotesContextProvider>
   </React.StrictMode>,
   document.getElementById('root')

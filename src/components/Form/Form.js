@@ -11,19 +11,15 @@ import validateTitle from "../../helpers/validateTitle";
 import validateDescription from "../../helpers/validateDescription";
 
 import styles from './Form.module.scss'
-import useNoteContext from "../../hooks/useNoteContext";
 
 const Form = ({
   formTitle,
   formDescription,
   itemID,
   formSubmitHandler,
+  isEdit,
+  setViewModeToDefault,
 }) => {
-  const {
-    submitEdit,
-    editItem,
-  } = useNoteContext();
-
   const [title, setTitle] = useState(formTitle);
   const [description, setDescription] = useState(formDescription);
 
@@ -35,7 +31,6 @@ const Form = ({
   const titleErrors = useMemo(() => validateTitle(title),[title]);
   const descriptionErrors = useMemo(() => validateDescription(description),[description]);
 
-
   const clearForm = () => {
     setTitle('');
     setDescription('')
@@ -43,6 +38,7 @@ const Form = ({
       title: false,
       description: false
     })
+    setViewModeToDefault()
   }
 
   const submitHandler = () => {
@@ -55,13 +51,12 @@ const Form = ({
     }
 
     formSubmitHandler(title, description, itemID)
-    submitEdit()
     clearForm()
   }
 
   return (
     <div className={styles.block}>
-      <h1>{editItem ? "Edit note" : "Create new note"}</h1>
+      <h1>{isEdit ? "Edit note" : "Create new note"}</h1>
       <form>
         <div className={styles.offset}>
           <Input
@@ -92,7 +87,7 @@ const Form = ({
             clickHandler={submitHandler}
             type="button"
           >
-            {editItem ? "Save": "Create"}
+            {isEdit ? "Save": "Create"}
           </Button>
           <Button
             clickHandler={clearForm}
